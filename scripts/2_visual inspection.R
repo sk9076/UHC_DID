@@ -1,3 +1,6 @@
+### you can SKIP script #1 and #2 if you use below line to load the merged data
+#dat_merged <- readRDS(here::here("data", "data_merged.rds"))
+
 # visual inspection & Figure 1 and 2
 
 fig1<-gen_fig1(dat_merged, "uhc_cat5")

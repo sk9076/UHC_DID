@@ -1,3 +1,4 @@
+require(pacman)
 pacman::p_load(tidyverse, ggplot2, dplyr, magrittr, ggthemr, linelist, openxlsx,latex2exp, gtsummary)
 ggthemr("fresh")
 # load the vaccination coverage and merge with UHC file

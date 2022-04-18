@@ -29,8 +29,20 @@ for(cutoff in cutoffs){
       res[1] + 1.96*res[2])
 }
 
-res_sen %>% ggplot() + 
+p_sen <- res_sen %>% ggplot() + 
   geom_errorbar(aes(cutoff, ymin = ci_low, ymax = ci_high, color = "95% CI")) +
   geom_point(aes(cutoff, beta, color = "DiD coefficient"), size=3) +
   scale_y_continuous(limits = c(-5, 10)) + 
-  geom_hline(yintercept = 0, color = "black", linetype = "dotted")
+  geom_hline(yintercept = 0, color = "black", linetype = "dotted")+
+  ylab("Difference-in-Difference Coefficient") +
+  xlab("UHC SCI 2019 Cut-Off Value")+
+  theme(legend.title = element_blank(),
+        legend.text = element_text(size = 12),
+        legend.position = "top")
+
+ggsave(p_sen,
+      filename= here::here("results", "sliding_cutoff.png"),
+       units = "in",
+       dpi = 100,
+       width = 5,
+       height = 4)

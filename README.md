@@ -1,4 +1,4 @@
-# Data and R code scripts to conduct a "Difference-in-Difference Analysis of Childhood Immunization Coverage Before and During the COVID-19 Pandemic"
+## Data and R code scripts to conduct a "Difference-in-Difference Analysis of Childhood Immunization Coverage Before and During the COVID-19 Pandemic"
 
 Sooyoung Kim (sk9076@nyu.edu)
 
@@ -8,6 +8,7 @@ This repository contains the R code scripts and the data that was used in the ma
 * The first script (1_merge and clean data.R) compiles data from different sources into one merged data file. This will be used througout the scripts. If you want to skip this process, you can run the code below to load the pre-cleaned/merged dataset in the data folder.
 
 ```{r, eval=F}
-#dat_merged <- readRDS(here::here("data", "data_merged.rds"))
+dat_merged <- readRDS(here::here("data", "data_merged.rds"))
 ```
+* Most of the results will be automatically saved in the "results" folder when you run the code. 
 * Associated manuscript is currently under review. 

@@ -1,3 +1,5 @@
+pacman::p_load(tidyverse, ggplot2, dplyr, magrittr, ggthemr, linelist, openxlsx,latex2exp, gtsummary)
+ggthemr("fresh")
 # load the vaccination coverage and merge with UHC file
 load_ipv <- function(path, sheet, uhc){
   dat <- rio::import(path,
@@ -29,7 +31,7 @@ convert_long <- function(data){
 save_plot <- function(plot, filename){
   ggsave(plot=plot,
          filename=filename,
-         path = here::here("results", "SDG3_plots"),
+         path = here::here("results"),
          units = "in",
          dpi = 100,
          width = 11,
@@ -39,7 +41,7 @@ save_plot <- function(plot, filename){
 save_plot_sep <- function(plot, filename, width = 15, height = 11){
   ggsave(plot=plot,
          filename=filename,
-         path = here::here("results", "SDG3_plots"),
+         path = here::here("results"),
          units = "in",
          dpi = 100,
          width = width,
@@ -276,4 +278,15 @@ gen_fig1 <- function(dat, cat){
     legend = "bottom")
   
   return(p_comb)
+}
+
+add_ci <- function(dat){
+  coef <- dat$coefficients
+  ci <- sprintf("(%.2f, %.2f)",
+              coef[,1] - 1.96*coef[,2],
+              coef[,1] + 1.96*coef[,2])
+  res <- data.frame(beta = coef[,1] %>% round(2), 
+             ci = ci,
+             pval = coef[,4] %>% round(3))
+  return(res)
 }

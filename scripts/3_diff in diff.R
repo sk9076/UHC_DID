@@ -118,33 +118,33 @@ saveWorkbook(overwrite = T,
 res_list_unadj <- list()
 for(vac in vaccines){
   if(vac=="All"){
-    base_temp1 <- glm(coverage ~ year + 
+    base_temp1 <- glm(coverage ~ 
                         prepost + uhc_cat5,
                       data = dat_merged %>% filter(year >=2010)) %>% summary()
-    did_temp1 <- glm(coverage ~ year + 
+    did_temp1 <- glm(coverage ~ 
                        prepost + uhc_cat5 + prepost*uhc_cat5,
                      data = dat_merged %>% filter(year >=2010)) %>% summary()
     
-    base_temp2 <-  glm(coverage ~ year + 
+    base_temp2 <-  glm(coverage ~ 
                          prepost + uhc_cat6,
                        data = dat_merged %>% filter(year >=2010)) %>% summary()
     
-    did_temp2 <- glm(coverage ~ year + 
+    did_temp2 <- glm(coverage ~ 
                        prepost + uhc_cat6 + prepost*uhc_cat6,
                      data = dat_merged %>% filter(year >=2010)) %>% summary()
   }else{
-    base_temp1 <- glm(coverage ~ year + 
+    base_temp1 <- glm(coverage ~ 
                         prepost + uhc_cat5,
                       data = dat_merged %>% filter(vaccine==vac, year >=2010)) %>% summary()
     
-    did_temp1 <- glm(coverage ~ year + 
+    did_temp1 <- glm(coverage ~ 
                        prepost + uhc_cat5 + prepost*uhc_cat5,
                      data = dat_merged %>% filter(vaccine==vac, year >=2010)) %>% summary()
     
-    base_temp2 <-  glm(coverage ~ year  +
+    base_temp2 <-  glm(coverage ~ 
                          prepost + uhc_cat6,
                        data = dat_merged %>% filter(vaccine==vac, year >=2010)) %>% summary()
-    did_temp1 <- glm(coverage ~ year + 
+    did_temp1 <- glm(coverage ~ 
                        prepost + uhc_cat6 + prepost*uhc_cat6,
                      data = dat_merged %>% filter(vaccine==vac, year >=2010)) %>% summary()
   }

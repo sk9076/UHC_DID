@@ -6,7 +6,8 @@ res_sen <- data.frame(
   cutoff = cutoffs,
   beta = rep(NA, length(cutoffs)),
   ci_low =rep(NA, length(cutoffs)),
-  ci_high =rep(NA, length(cutoffs))
+  ci_high =rep(NA, length(cutoffs)),
+  pval = rep(NA, length(cutoffs))
 )
 
 for(cutoff in cutoffs){
@@ -23,10 +24,11 @@ for(cutoff in cutoffs){
   
   res <- did_temp$coefficients[which(rownames(did_temp$coefficients)=="prepost:temp_cat"),]
 
-  res_sen[which(res_sen$cutoff == cutoff), c("beta", "ci_low", "ci_high")] <-
+  res_sen[which(res_sen$cutoff == cutoff), c("beta", "ci_low", "ci_high", "pval")] <-
     c(res[1],
       res[1] - 1.96*res[2],
-      res[1] + 1.96*res[2])
+      res[1] + 1.96*res[2],
+      res[4])
 }
 
 p_sen <- res_sen %>% ggplot() + 
@@ -40,9 +42,13 @@ p_sen <- res_sen %>% ggplot() +
         legend.text = element_text(size = 12),
         legend.position = "top")
 
+res_sen[,2:4] <- apply(res_sen[,2:4], 2, function(x) round(x, 3))
+res_sen$pval %<>% round(4)
+
+rio::export(res_sen, here::here("results", "sliding_cutoff_table.xlsx"))
 ggsave(p_sen,
       filename= here::here("results", "sliding_cutoff.png"),
        units = "in",
-       dpi = 100,
+       dpi = 300,
        width = 5,
        height = 4)

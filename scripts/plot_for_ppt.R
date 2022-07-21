@@ -2,9 +2,9 @@ pacman::p_load(ggplot2, dplyr, tidyverse)
 ggthemr::ggthemr("fresh")
 
 dat <- data.frame(
-  did = c(-3.31, -3.31+2.93),
-  low = c(-4.17, -4.17+0.78),
-  high = c(-2.45, -2.45+5.08),
+  did = c(-3.11, -3.11+2.7),
+  low = c(-3.93, -3.93+0.75),
+  high = c(-2.29, -2.29+4.65),
   group = c("Countries with \nUHC SCI 2019 <80", 
             "Countries with \nUHC SCI 2019 \u2265 80")
 )
@@ -24,7 +24,7 @@ fig2 <- ggplot(dat,
   theme(legend.position = "top",
         axis.text.x = element_text(size = 14))
 
-ggsave(filename = "/Users/sookim/Documents/Projects/UHC_COVID/results/figure2.png",
+ggsave(filename = here::here("results", "figure2.png"),
        plot = fig2,
        width = 8,
        height = 5,

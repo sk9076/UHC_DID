@@ -44,7 +44,20 @@ ggsave(here::here("results", "figure_s1_1.png"),
        height = 9,
        dpi=100)
 
+# Table S1-2 and 3
+tab_country <- dat_merged[!duplicated(dat_merged$name),]
+# categorizaton based on UHC index cut-off 80
+table1::table1(~ uhc_2019 + factor(wb_income) + factor(who_region) + ghsi|uhc_cat5,
+               data = tab_country)
+# categorizaton based on UHC index cut-off 50
+table1::table1(~ uhc_2019 + factor(wb_income) + factor(who_region) + ghsi|uhc_cat6,
+               data = tab_country)
 
+# Figure S1-B
+ggplot(tab_country, aes(uhc_2019)) + geom_histogram()+
+  xlab("UHC SCI 2019 (Range 0 - 100)") + ylab("Count") +
+  scale_x_continuous(limits = c(0, 100), breaks = seq(0, 100, 10)) +
+  geom_vline(xintercept = 80, linetype = "dotted", color = "black")
 #do_did(dat_merged, "uhc_cat5")
 #do_did(dat_merged, "uhc_cat6")
 #do_did(dat_merged, "uhc_cat7")

@@ -61,11 +61,7 @@ ipv_dat <- rio::import(ipv_path) %>% clean_data()
 dat_merged <- ipv_dat %>% left_join(uhc, by = c("name" = "country")) %>%
   mutate(
     vaccine = toupper(vaccine),
-    prepost = ifelse(year<=2019, 0, 1),
-    wb_income = factor(wb_income, levels = c("low", "lm", "um", "high")),
-    who_region = factor(who_region, levels = c("americas", "europe", "western_pacific",
-                                               "eastern_mediterranean", "south_east_asia",
-                                               "africa"))
+    prepost = ifelse(year<=2019, 0, 1)
   ) %>%
   filter(!is.na(uhc_2019),
          !vaccine %in% c("IPV1", "YFV"))
@@ -84,4 +80,42 @@ ghs <- rio::import(here::here("data", "ghsi_2019.xlsx"))%>% clean_data() %>%
 
 dat_merged %<>% left_join(ghs, c("name" = "country2"))
 
-saveRDS(dat_merged, here::here("dat_merged_jul2022.RDS"))  
+dat_merged %<>% mutate(
+  wb_income = case_when(
+    name == "andorra" ~ "high",
+    #name == "cook_islands" ~ NA_character_,
+    name == "dominica" ~ "um",
+    name == "marshall_islands" ~ "um",
+    name == "monaco" ~ "high",
+    name == "nauru" ~ "high",
+    name == "niue" ~ "high",
+    name == "palau" ~ "high",
+    name == "saint_kitts_and_nevis" ~ "high",
+    name == "san_marino" ~ "high",
+    name == "state_of_palestine" ~ "lm",
+    name == "tuvalu" ~ "um",
+    TRUE ~ wb_income
+  ),
+  who_region = case_when(
+    name == "andorra" ~ "europe",
+    name == "cook_islands" ~ "western_pacific",
+    name == "dominica" ~ "americas",
+    name == "marshall_islands" ~ "western_pacific",
+    name == "monaco" ~ "europe",
+    name == "nauru" ~ "western_pacific",
+    name == "niue" ~ "western_pacific",
+    name == "palau" ~ "western_pacific",
+    name == "saint_kitts_and_nevis" ~ "americas",
+    name == "san_marino" ~ "europe",
+    name == "state_of_palestine" ~ "eastern_mediterranean",
+    name == "tuvalu" ~ "western_pacific",
+    TRUE ~ who_region
+  )
+  )%>%
+  mutate(
+  wb_income = factor(wb_income, levels = c("low", "lm", "um", "high")),
+who_region = factor(who_region, levels = c("americas", "europe", "western_pacific",
+                                           "eastern_mediterranean", "south_east_asia",
+                                           "africa"))
+)
+saveRDS(dat_merged, here::here("data", "dat_merged.RDS"))  

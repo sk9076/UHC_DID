@@ -28,6 +28,7 @@ uhc %<>% full_join(uhc_2019, c("country" = "location_name")) %>%
       country== "united_kingdom_of_great_britain_and_northern_ireland" ~ "united_kingdom",
       country== "united_states_of_america" ~ "united_states",
       country == "palestine" ~ "state_of_palestine",
+      country =="north_macedonia" ~ "republic_of_north_macedonia",
       TRUE ~ country
     )
   )
@@ -54,7 +55,7 @@ uhc %<>% mutate(
 # load immunization data
 ipv_path <- here::here("data", "wuenic2020rev_data_2021-07-28.csv")
 
-ipv_dat <- rio::import(ipv_path) %>% clean_data()
+ipv_dat <- rio::import(ipv_path) %>% clean_data() 
 
 # merge with the uhc data
 dat_merged <- ipv_dat %>% left_join(uhc, by = c("name" = "country")) %>%
@@ -75,6 +76,7 @@ ghs <- rio::import(here::here("data", "ghsi_2019.xlsx"))%>% clean_data() %>%
     country2 = case_when(
       country2 == "cute_d_ivoire" ~ "cote_d_ivoire",
       country2 == "united_states_of_america" ~ "united_states",
+      country2 == "north_macedonia" ~ "republic_of_north_macedonia",
       TRUE ~ country2 
     )
   )

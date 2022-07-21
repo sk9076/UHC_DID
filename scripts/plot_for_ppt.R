@@ -11,14 +11,17 @@ dat <- data.frame(
 
 fig2 <- ggplot(dat,
        aes(x=group, y=did, fill = group)) + geom_bar(stat="identity") +
-  geom_errorbar(aes(x=group, ymin = low, ymax=high),
+  geom_errorbar(aes(x=group, ymin = low, ymax=high, 
+                    color = "95% confidence interval"),
                 width = 0.3,
-                color = "black",
                 size = 0.5) +
   geom_hline(yintercept = 0, color="black")+
+  scale_color_manual(name = "",
+                     values = "black")+
+  scale_fill_discrete(guide = "none")+
   xlab("")+
-  ylab("Drop in childhood immunization coverage (%) \nduring the COVID-19 pandemic") +
-  theme(legend.position = "none",
+  ylab("Drop in childhood immunization \ncoverage (%) during 2020") +
+  theme(legend.position = "top",
         axis.text.x = element_text(size = 14))
 
 ggsave(filename = "/Users/sookim/Documents/Projects/UHC_COVID/results/figure2.png",

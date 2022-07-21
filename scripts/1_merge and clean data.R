@@ -8,16 +8,26 @@ uhc <- rio::import(here::here("data", "WHO_agg_data.xlsx")) %>%
 uhc_2019 <- rio::import(here::here("data", "uhc_2019.xlsx")) %>% 
   filter(year_id==2019, indicator_name=="UHC effective coverage index") %>%
   select(location_name, val) %>%
-  clean_data()
+  clean_data() 
 
 colnames(uhc_2019) <- c("location_name", "uhc_2019")
 
-uhc %<>% left_join(uhc_2019, c("country" = "location_name")) %>%
+uhc_2019 %<>% mutate(
+  location_name = case_when(
+    location_name == "united_kingdom" ~"united_kingdom_of_great_britain_and_northern_ireland",
+    location_name == "united_states" ~ "united_states_of_america",
+    location_name == "north macedpnia" ~ "republic_of_north_macedonia ",
+    location_name == "cute_d_ivoire" ~ "cote_d_ivoire",
+    TRUE ~ location_name
+  )
+)
+
+uhc %<>% full_join(uhc_2019, c("country" = "location_name")) %>%
   mutate(
     country = case_when(
       country== "united_kingdom_of_great_britain_and_northern_ireland" ~ "united_kingdom",
       country== "united_states_of_america" ~ "united_states",
-      country == "republic_of_north_macedonia " ~ "north_macedonia",
+      country == "palestine" ~ "state_of_palestine",
       TRUE ~ country
     )
   )
@@ -27,19 +37,19 @@ uhc %>% ggplot(aes(uhc_2019)) + geom_histogram()+
   scale_x_continuous(limits = c(0, 100), breaks = seq(0, 100, 10)) +
   geom_vline(xintercept = 80, linetype = "dotted", color = "black")
 
-summary(uhc$uhc_2019) +
-  
-  
-  uhc %<>% mutate(
-    uhc_cat = as.factor(ntile(uhc_2019, 4)),
-    uhc_cat2 = ifelse(uhc_cat == "4", "Top quantile", "Rest"),
-    uhc_cat3 = ifelse(uhc_cat %in% c("4", "3"), "Top half", "Bottom half"),
-    uhc_cat4 = ifelse(uhc_cat == "1", "Bottom quantile", "Rest"),
-    uhc_cat5 = ifelse(uhc_2019>=80, "UHC Index >=80", "UHC Index <80"),
-    uhc_cat6 = ifelse(uhc_2019<50, "UHC Index <50", "UHC Index >=50"),
-    uhc_cat7 = ifelse(uhc_2019 <50, "UHC Index <50", 
-                      ifelse(uhc_2019>=80, "UHC Index >=80", NA))
-  ) 
+summary(uhc$uhc_2019) 
+
+
+uhc %<>% mutate(
+  uhc_cat = as.factor(ntile(uhc_2019, 4)),
+  uhc_cat2 = ifelse(uhc_cat == "4", "Top quantile", "Rest"),
+  uhc_cat3 = ifelse(uhc_cat %in% c("4", "3"), "Top half", "Bottom half"),
+  uhc_cat4 = ifelse(uhc_cat == "1", "Bottom quantile", "Rest"),
+  uhc_cat5 = ifelse(uhc_2019>=80, "UHC Index >=80", "UHC Index <80"),
+  uhc_cat6 = ifelse(uhc_2019<50, "UHC Index <50", "UHC Index >=50"),
+  uhc_cat7 = ifelse(uhc_2019 <50, "UHC Index <50", 
+                    ifelse(uhc_2019>=80, "UHC Index >=80", NA))
+) 
 
 # load immunization data
 ipv_path <- here::here("data", "wuenic2020rev_data_2021-07-28.csv")
@@ -60,6 +70,16 @@ dat_merged <- ipv_dat %>% left_join(uhc, by = c("name" = "country")) %>%
          !vaccine %in% c("IPV1", "YFV"))
 
 # load GHSI data
-ghs <- rio::import(here::here("data", "ghsi_2019.xlsx"))%>% clean_data()
+ghs <- rio::import(here::here("data", "ghsi_2019.xlsx"))%>% clean_data() %>%
+  mutate(
+    country2 = case_when(
+      country2 == "cute_d_ivoire" ~ "cote_d_ivoire",
+      country2 == "united_states_of_america" ~ "united_states",
+      TRUE ~ country2 
+    )
+  )
+
 
 dat_merged %<>% left_join(ghs, c("name" = "country2"))
+
+saveRDS(dat_merged, here::here("dat_merged_jul2022.RDS"))  

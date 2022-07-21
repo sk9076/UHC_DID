@@ -254,8 +254,8 @@ gen_fig1 <- function(dat, cat){
     scale_y_continuous(limits = c(0,100), breaks = seq(0, 100, 20))+
     xlab("Year") +
     ylab("Coverage (%, Range 0-100)") +
-    scale_color_discrete(labels = c('UHC Index >=80' = expression(paste('UHC SCI ', "">=80)),
-                                    'UHC Index <80' = expression(paste('UHC SCI ', ""<80))))+
+    scale_color_discrete(labels = c('UHC Index >=80' = expression(paste('UHC SCI 2019 ', "">=80)),
+                                    'UHC Index <80' = expression(paste('UHC SCI 2019', ""<80))))+
     
     theme(legend.title = element_blank(),
           axis.text = element_text(size = 8))
@@ -266,8 +266,8 @@ gen_fig1 <- function(dat, cat){
     scale_y_continuous(limits = c(0,100), breaks = seq(0, 100, 20))+
     xlab("Year") +
     ylab("Coverage (%, Range 0-100)") +
-    scale_color_discrete(labels = c('UHC Index >=80' = expression(paste('UHC SCI ', "">=80)),
-                                    'UHC Index <80' = expression(paste('UHC SCI ', ""<80))))+
+    scale_color_discrete(labels = c('UHC Index >=80' = expression(paste('UHC SCI 2019 ', "">=80)),
+                                    'UHC Index <80' = expression(paste('UHC SCI 2019', ""<80))))+
     ggtitle("Overall")+
     theme(legend.title = element_blank())
   

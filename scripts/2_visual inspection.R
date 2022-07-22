@@ -36,7 +36,7 @@ ggsave(here::here("results", "figure_1.png"),
        fig1,
        width = 8,
        height = 9,
-       dpi=100)
+       dpi=300)
 
 ggsave(here::here("results", "figure_s1_1.png"),
        fig2,
